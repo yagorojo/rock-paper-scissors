@@ -2,10 +2,6 @@ function getComputerChoice() {
   return Math.floor(Math.random() * 3);
 }
 
-function parseInput(input) {
-  return input.toUpperCase();
-}
-
 function playRound(playerSelection, computerSelection) {
   let result;
   let condition = playerSelection - computerSelection;
