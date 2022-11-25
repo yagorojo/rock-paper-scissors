@@ -2,31 +2,47 @@ function getComputerChoice() {
   return Math.floor(Math.random() * 3);
 }
 
-function playRound(playerSelection, computerSelection) {
-  let result;
-  let condition = playerSelection - computerSelection;
+function playRound(e) {
+  const playerSelection = parseInt(e.target.dataset.tag);
+  const computerSelection = getComputerChoice();
+  const result = playerSelection - computerSelection;
 
-  if (condition === -1 || condition === 2)
-    result = `You win! ${options[playerSelection]} beats ${options[computerSelection]}`;
-  else if (condition === 0)
-    result = `It's a draw!`;
-  else
-    result = `You lose! ${options[computerSelection]} beats ${options[playerSelection]}`;
+  if (result === -1 || result === 2) {
+    playerScore += 1;
+    message.textContent = `You win! ${options[playerSelection]} 
+      beats ${options[computerSelection]}`;
+  } else if (result === 0) {
+    message.textContent = `It's a tie!`;
+  } else {
+    computerScore += 1;
+    message.textContent = `You lose! ${options[computerSelection]}
+      beats ${options[playerSelection]}`;
+  }
 
-
-  return result;
+  score.textContent = `${playerScore} - ${computerScore}`;  
+  checkWinner();
 }
 
-function game() {
-  let playerSelection = null;
-  let message = "0 - Rock! 1 - Paper! 2 - Scissors!\n\nChoose:";
+function checkWinner() {
+  if (playerScore === 5 || computerScore === 5) {
+    buttons.forEach(button => button.disabled = true);
+  }
 
-  for (let i = 0; i < 5; i++) {
-    playerSelection = parseInt(prompt(message));
-
-    console.log(playRound(playerSelection, getComputerChoice()));
+  if (playerScore === 5) {
+    message.textContent = `Congratulations, you won!`;
+  } else if (computerScore === 5) {
+    message.textContent = `Maybe next time :(`;
   }
 }
 
 let options = ["Rock", "Paper", "Scissors"];
-game();
+let buttons = Array.from(document.querySelectorAll('button'));
+let score = document.querySelector('.score');
+let message = document.querySelector('.message');
+let computerScore = 0;
+let playerScore = 0;
+let winner = '';
+
+buttons.forEach(button => 
+  button.addEventListener('click', playRound)
+);
